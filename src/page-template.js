@@ -2,7 +2,7 @@
     function generatePage (teamData) {
         // create var for each card
         let myTeam = '';
-        teamData.array.forEach(employee => {
+        teamData.forEach(employee => {
           let role = '';
            
         
