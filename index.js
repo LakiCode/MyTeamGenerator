@@ -1,6 +1,6 @@
 const fs = require("fs");
 const inquirer = require("inquirer");
-const generatePage = require("./dist/page-template");
+const generatePage = require("./src/page-template");
 
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
@@ -28,6 +28,7 @@ const teamData = [];
 
 const promptManager = () => {
   // Enter data for Manager
+
   return inquirer.prompt([
     {
       type: "input",
@@ -67,10 +68,19 @@ const promptManager = () => {
       message: "Enter your office number:",
       validate: requireOfficeNum,
     },
-  ]);
+  ])
+  .then ((inputData) => {
+    const manager = new Manager (
+      inputData.name,
+      inputData.id,
+      inputData.email,
+      inputData.officeNumber
+    );
+      teamData.push(manager);
+      console.log(teamData)
+  });
 };
-
-const promptMenu = (menuList) => {
+const promptMenu = () => {
   console.log(` 
         ====================
           Add Members to your team
@@ -83,39 +93,31 @@ const promptMenu = (menuList) => {
         message: "Add new team member or finish",
         name: "teamMembers",
         choices: ["engineer", "intern", "done"],
-        default: "done",
-        validate: (teamInput) => {
-          if (teamInput === engeneer) {
-            console.log("you select to add new engeneer in your team");
-            promptMenu();
-          } else if (teamInput === intern) {
-            console.log("you select to add new engeneer in your team");
-            promptMenu();
-          } else {
-            console.log("you select to finish adding member to your team");
-            return teamData;
-          }
-        },
-      },
+        default: "done"
+        }
     ])
     .then((menuAnswer) => {
       console.log(menuAnswer);
-      if (menuAnswer.teamMembers === "intern") {
-        newTeamMember = new Intern(name, id, email, school);
-        inquirer
-          .prompt([
+      if (menuAnswer.teamMembers === "engineer") {
+        inquirer.prompt([
             {
               type: "input",
-              name: "id",
-              message: "What is the name of your project? (Required)",
+              name: "name",
+              message: "What is engineer name? (Required)",
               validate: (nameInput) => {
                 if (nameInput) {
                   return true;
                 } else {
-                  console.log("You need to enter a project name!");
+                  console.log("You need to enter a engineer name!");
                   return false;
                 }
               },
+            },
+            {
+              type: "input",
+              name: "id",
+              message: "Enter your Employee id:",
+              validate: requireNumber,
             },
             {
               type: "input",
@@ -125,59 +127,121 @@ const promptMenu = (menuList) => {
                 if (nameInput) {
                   return true;
                 } else {
-                  console.log("You need to enter a project name!");
+                  console.log("You need to enter a engineer email address!");
                   return false;
                 }
               },
             },
             {
-              type: "input",
-              name: "school",
-              message: "What is the name of your school (Required)",
-              validate: (nameInput) => {
-                if (nameInput) {
+              type: 'input',
+              name: 'github',
+              message: 'Enter your GitHub Username (Required)',
+              validate: githubInput => {
+                if (githubInput) {
                   return true;
                 } else {
-                  console.log("You need to enter a project name!");
+                  console.log('Please enter your GitHub username!');
                   return false;
                 }
-              },
+              }
             },
           ])
-          .then((teamData) => {
-            console.log(teamData);
+          .then((inputData) => {
+            console.log(inputData);
+            newEngineer = new Engineer (
+              inputData.name, 
+              inputData.id,
+              inputData.email, 
+              inputData.github);
+              teamData.push(newEngineer);
             return promptMenu();
           });
-      }
+        } else if  (menuAnswer.teamMembers === "intern") {
+          inquirer.prompt([
+              {
+                type: "input",
+                name: "name",
+                message: "What is Intern name? (Required)",
+                validate: (nameInput) => {
+                  if (nameInput) {
+                    return true;
+                  } else {
+                    console.log("You need to enter a Intern name!");
+                    return false;
+                  }
+                },
+              },
+              {
+                type: "input",
+                name: "id",
+                message: "Enter your Employee id:",
+                validate: requireNumber,
+              },
+              {
+                type: "input",
+                name: "email",
+                message: "What is the name of your email (Required)",
+                validate: (nameInput) => {
+                  if (nameInput) {
+                    return true;
+                  } else {
+                    console.log("You need to enter a email address!");
+                    return false;
+                  }
+                },
+              },
+              {
+                type: "input",
+                name: "school",
+                message: "What is the name of your school (Required)",
+                validate: (nameInput) => {
+                  if (nameInput) {
+                    return true;
+                  } else {
+                    console.log("You need to enter a intern school name!");
+                    return false;
+                  }
+                },
+              },
+            ])
+            .then((inputData) => {
+              console.log(inputData);
+              newIntern = new Intern (
+                inputData.name, 
+                inputData.id,
+                inputData.email, 
+                inputData.school);
+                teamData.push(newIntern);
+              return promptMenu();
+              });
+        } else {
+                 console.log ('test', ...teamData)
+          
+          const pageHTML = generatePage(teamData);
+          console.log(pageHTML);
+          
+          fs.writeFile('./index.html', pageHTML, err => {
+             if (err) throw new Error(err);
+        
+             console.log('Page created! Check out index.html in this directory to see it!');
+           }); 
+           
+        }
     });
 };
+
 /*
-      {
-        type: 'input',
-        name: 'github',
-        message: 'Enter your GitHub Username (Required)',
-        validate: githubInput => {
-          if (githubInput) {
-            return true;
-          } else {
-            console.log('Please enter your GitHub username!');
-            return false;
-          }
-        }
-      }
+
     */
 
 promptManager()
-.then(promptMenu);
+.then(promptMenu)
+/*
+.then(pageData => {
+
+
+});
+*/
 // Write the user response to a file by chaining the below callback method to the prompt above.
 
-/* .then(teamData => {
-
-    const pageHTML = generatePage(teamData);
-
-    fs.writeFile('./index.html', pageHTML, err => {
-       if (err) throw new Error(err);
-
-       console.log('Page created! Check out index.html in this directory to see it!');
-     }); 
-  }); */
+/*  */
