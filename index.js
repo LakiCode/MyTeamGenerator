@@ -224,7 +224,15 @@ const promptMenu = () => {
              if (err) throw new Error(err);
         
              console.log('Page created! Check out index.html in this directory to see it!');
-           }); 
+           // copy style page 
+           fs.copyFile('./src/style.css', './dist/style.css', err => {
+            if (err) {
+              console.log(err);
+              return;
+            }
+            console.log('Style sheet copied successfully!');
+          });
+            }); 
            
         }
     });
