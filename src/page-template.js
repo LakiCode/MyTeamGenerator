@@ -22,7 +22,6 @@
                  </ul>
                  <div class="card-body">
                  <a target="_blank" href="https://www.github.com/${employee.github}"> Github user name: ${employee.github}</a>
-                   <a href="#" class="card-link">Another link</a>
                  </div>
                </div>
                    `
@@ -52,7 +51,7 @@
             <main class="container my-5">
             <div id=card class="row">
             ${myTeam}
-            </div>
+            
             </main>
           </body>
         </html>
