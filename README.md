@@ -30,7 +30,7 @@
  My email address is: 
  rfuke@loffacorp.com
 ## App screenshots
-![alt text](images/terminal.jpg "terminal")
-![alt text](/images/readme_results.jpg "Generated page")
+![alt text](images/terminal.jpg "run code from terminal")
+![alt text](/images/generated_index.html.jpg "Generated Index page")
 ### Video Link 
 <a href="https://drive.google.com/file/d/1Y1UqZ5CJ7uxy2q4yV0JV4eUVGkkqFvv6/view" target="_blank">My Team Generator Video</a>
