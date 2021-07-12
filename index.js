@@ -1,5 +1,11 @@
 const fs = require("fs");
 const inquirer = require("inquirer");
+const generatePage = require("./dist/page-template");
+
+const Manager = require("./lib/Manager");
+const Engineer = require("./lib/Engineer");
+const Intern = require("./lib/Intern");
+
 // test if user input number
 const requireNumber = (value) => {
   if (/^\d+$/.test(value)) {
@@ -17,9 +23,11 @@ const requireOfficeNum = (value) => {
     return false;
   }
 };
+// create data array
+const teamData = [];
 
-const promptUser = () => {
-  // Prompt the user
+const promptManager = () => {
+  // Enter data for Manager
   return inquirer.prompt([
     {
       type: "input",
@@ -36,7 +44,7 @@ const promptUser = () => {
     },
     {
       type: "input",
-      name: "employeeid",
+      name: "id",
       message: "Enter your Employee id:",
       validate: requireNumber,
     },
@@ -55,80 +63,95 @@ const promptUser = () => {
     },
     {
       type: "input",
-      name: "officenum",
+      name: "officeNumber",
       message: "Enter your office number:",
       validate: requireOfficeNum,
     },
   ]);
 };
 
-const promptMenu = menuList => {
+const promptMenu = (menuList) => {
   console.log(` 
-        ============
-        Menu  option
-        ============
+        ====================
+          Add Members to your team
+        ====================
         `);
-  return inquirer.prompt([
-    {
-      type: "list",
-      message: "Add new team member or finish",
-      name: "teamMembers",
-      choices: ["engineer", "intern", "done"],
-      default: "done",
-      validate: teamInput => {
+  return inquirer
+    .prompt([
+      {
+        type: "list",
+        message: "Add new team member or finish",
+        name: "teamMembers",
+        choices: ["engineer", "intern", "done"],
+        default: "done",
+        validate: (teamInput) => {
           if (teamInput === engeneer) {
-              console.log ("you select to add new engeneer in your team")
-              promptMenu();
+            console.log("you select to add new engeneer in your team");
+            promptMenu();
           } else if (teamInput === intern) {
-            console.log ("you select to add new engeneer in your team")
-                promptMenu();
+            console.log("you select to add new engeneer in your team");
+            promptMenu();
           } else {
-            console.log ("you select to finish adding member to your team")
+            console.log("you select to finish adding member to your team");
             return teamData;
           }
-      }
-    },
-  ])
-  .then(menuAnswer => {
-      console.log (menuAnswer);
-      if (menuAnswer.teamMembers === 'intern') {
-         inquirer
-        .prompt([
-          {
-            type: 'input',
-            name: 'name',
-            message: 'What is the name of your project? (Required)',
-            validate: nameInput => {
-              if (nameInput) {
-                return true;
-              } else {
-                console.log('You need to enter a project name!');
-                return false;
-              }
-            }
+        },
       },
-      {
-        type: 'input',
-        name: 'email',
-        message: 'What is the name of your email (Required)',
-        validate: nameInput => {
-          if (nameInput) {
-            return true;
-          } else {
-            console.log('You need to enter a project name!');
-            return false;
-          }
-        }
-  }
     ])
-    .then(IamDone =>{
-        console.log(IamDone);
-        return promptMenu();
-    })
-    }
-  });
-}
-  /*
+    .then((menuAnswer) => {
+      console.log(menuAnswer);
+      if (menuAnswer.teamMembers === "intern") {
+        newTeamMember = new Intern(name, id, email, school);
+        inquirer
+          .prompt([
+            {
+              type: "input",
+              name: "id",
+              message: "What is the name of your project? (Required)",
+              validate: (nameInput) => {
+                if (nameInput) {
+                  return true;
+                } else {
+                  console.log("You need to enter a project name!");
+                  return false;
+                }
+              },
+            },
+            {
+              type: "input",
+              name: "email",
+              message: "What is the name of your email (Required)",
+              validate: (nameInput) => {
+                if (nameInput) {
+                  return true;
+                } else {
+                  console.log("You need to enter a project name!");
+                  return false;
+                }
+              },
+            },
+            {
+              type: "input",
+              name: "school",
+              message: "What is the name of your school (Required)",
+              validate: (nameInput) => {
+                if (nameInput) {
+                  return true;
+                } else {
+                  console.log("You need to enter a project name!");
+                  return false;
+                }
+              },
+            },
+          ])
+          .then((teamData) => {
+            console.log(teamData);
+            return promptMenu();
+          });
+      }
+    });
+};
+/*
       {
         type: 'input',
         name: 'github',
@@ -144,11 +167,11 @@ const promptMenu = menuList => {
       }
     */
 
-promptUser()
-  .then(promptMenu)
-  // Write the user response to a file by chaining the below callback method to the prompt above.
- 
- /* .then(teamData => {
+promptManager()
+.then(promptMenu);
+// Write the user response to a file by chaining the below callback method to the prompt above.
+
+/* .then(teamData => {
 
     const pageHTML = generatePage(teamData);
 
