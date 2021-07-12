@@ -16,7 +16,7 @@
                    </div>
                    <ul class="list-group list-group-flush">
                    <li class="list-group-item">Employee ID: ${employee.id}</li>
-                   <<a href="mailto:${employee.email}?subject=Mail from ${employee.name}" class="card-link">Email address: ${employee.email}</a>
+                   <a href="mailto:${employee.email}?subject=Mail from ${employee.name}" class="card-link">Email address: ${employee.email}</a>
                    <li class="list-group-item">School: ${employee.school}</li>
                    <li class="list-group-item">Office Number: ${employee.officeNumber}</li>
                  </ul>
@@ -43,7 +43,6 @@
         </head>
         <header>
         <div class="container flex-row justify-space-between align-center py-3">
-          <h1 class="page-title text-secondary bg-dark py-2 px-3">${header.name}</h1>
           <nav class="flex-row">
             <h1> My Team</h1>
           </nav>

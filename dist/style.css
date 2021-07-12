@@ -38,3 +38,32 @@
     color: var(--dark);
     line-height: 1.25;
   }
+  header {
+    background-color: var(--primary);
+    position: sticky;
+    top: 0;
+  }
+  
+  nav {
+    width: 100%;
+    margin-top: 10px;
+    justify-content: center;
+  }
+  /* CARDS */
+.card {
+    margin: 0 0 20px 0;
+    border: 3px solid var(--dark);
+    border-radius: var(--border-radius);
+  }
+  
+  .card-header {
+    color: var(--primary);
+    background-color: var(--light);
+    padding: 2.5%;
+    border-radius: calc(0.18rem - 1px) calc(0.18rem - 1px) 0 0;
+  }
+  
+  .card-body {
+    padding: 2.5%;
+  }
+  
